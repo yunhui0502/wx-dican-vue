@@ -9,7 +9,7 @@ function resolve (dir) {
 
 module.exports = {
   // 开发服务配置
-  publicPath: process.env.NODE_ENV === 'production' ? '/hanfu-total' : '/',
+  publicPath: process.env.NODE_ENV === 'production' ? '/dican' : '/',
   devServer: {
     port: 8888, // 端口号
     host: 'localhost', // 主机
