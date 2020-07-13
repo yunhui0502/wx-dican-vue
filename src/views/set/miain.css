@@ -1,0 +1,104 @@
+.mb20 {
+  margin-bottom: 20px;
+}
+.mr70 {
+  margin-right: 70px;
+}
+.mt30 {
+  margin-top: 70px;
+}
+.major-button {
+  width: 232px;
+  height: 40px;
+  background: #68aaff;
+  border-radius: 3px;
+}
+p,
+span {
+  transform: scale(0.8);
+  font-family: Microsoft YaHei;
+  font-weight: 400;
+  color: #cfcfcf;
+}
+.edito {
+  font-size: 10px;
+  transform: scale(0.8);
+  font-family: Microsoft YaHei;
+  font-weight: 400;
+  color: #cfcfcf;
+  margin-left: 120px;
+}
+.el-button--mini {
+  padding: 4px 6px;
+  font-size: 10px;
+}
+.checkbox {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+.elbutt {
+  margin: 0 auto;
+  width: 200px;
+  height: 40px;
+  background: #68aaff;
+  border-radius: 3px;
+}
+.input-item {
+  width: 238px;
+}
+.input-item2 {
+  width: 600px;
+  margin: 0 auto;
+}
+.button-item2 {
+  width: 90px;
+}
+ /deep/ .el-form-item__content {
+  line-height: 29px;
+}
+.el-row-p {
+  padding-left: 12px;
+  margin-top: 18PX;
+}
+.el-img {
+  width: 238px;
+  height: 49px;
+  border-radius: 3px;
+}
+.el-img2 {
+  width: 85px;
+  height: 49px;
+  border-radius: 3px;
+}
+.tu-text {
+  height: 40px;
+  line-height: 40px;
+  font-size: 13px;
+  font-family: Microsoft YaHei;
+  font-weight: 400;
+  color: #666666;
+}
+.div-h4 {
+  font-size: 13px;
+  font-family: Microsoft YaHei;
+  font-weight: bold;
+  color: #666666;
+  display: inline;
+}
+#box {
+  width: 300px;
+  height: 32px;
+  overflow: hidden;
+  padding-left: 30px;
+}
+.anim {
+  transition: all 0.5s;
+  margin-top: -30px;
+}
+#con1 li {
+  list-style: none;
+  line-height: 30px;
+  height: 30px;
+}

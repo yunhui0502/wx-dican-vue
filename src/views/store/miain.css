@@ -1,0 +1,36 @@
+.el-button--mini {
+  padding: 3px;
+  font-size: 10px;
+}
+.typepage .p13 {
+  margin: 13px;
+}
+.typepage .box-card {
+  margin: 9px;
+}
+.typepage .content {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  line-height: 70px;
+  width: 900px;
+}
+.typepage .content div {
+  width: 400px;
+  height: 157px;
+}
+.typepage .content div span {
+  font-size: 13px;
+  font-weight: 400;
+  color: #999999;
+}
+.typepage .content div h5 {
+  font-size: 21px;
+  font-family: Microsoft YaHei;
+  font-weight: bold;
+  color: #000000;
+}
+.f10 {
+  margin: 10px;
+  line-height: 40px;
+}
