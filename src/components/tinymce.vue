@@ -16,8 +16,8 @@ import 'tinymce/plugins/wordcount' // 字数统计插件
 import 'tinymce/plugins/code'// 显示源代码插件
 import 'tinymce/plugins/advlist' // 这几条引入是因为我的导入不了，不知道为啥
 import 'tinymce/plugins/link'
-import 'tinymce/plugins/lineheight'
-import 'tinymce/plugins/indent2em'
+import '@/assets/tinymce/plugins/lineheight'
+import '@/assets/tinymce/plugins/indent2em'
 import 'tinymce/plugins/nonbreaking'
 import 'tinymce/plugins/textcolor'
 import 'tinymce/plugins/paste'
