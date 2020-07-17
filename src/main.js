@@ -5,6 +5,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import store from './store'
 
+import 'tinymce/skins/ui/oxide/skin.css'
 import './assets/font/iconfont.css'
 import './style/index.css'
 

@@ -2,15 +2,14 @@
   <!------------------------------------------账户管理-------------------------------------------------------------->
   <div>
     <div class="typepage">
-      <el-card class="box-card">
+      <el-card  class="box-card">
         <el-radio-group v-model="radiobutton" @change="Tabs" size="medium">
           <el-radio-button class="p13" label="1">富文本</el-radio-button>
           <el-radio-button class="p13" label="2">富文本列表</el-radio-button>
-          <el-radio-button class="p13" label="3">新增子账户</el-radio-button>
         </el-radio-group>
       </el-card>
 
-      <el-card class="box-card">
+      <el-card v-if="criteria==1" class="box-card">
         <div style="display:flex;justify-content : space-between;">
           <el-upload
             ref="doctypeCrfile"
@@ -34,7 +33,7 @@
           </div>
            <div>
              <div>富文本类型</div>
-             <el-select v-model="this.form.textType" placeholder="项目类型">
+             <el-select v-model="form.textType" placeholder="项目类型">
                 <el-option
                   v-for="item in options"
                   :key="item.value"
@@ -46,20 +45,28 @@
         </div>
 
         <!-- <edito :catchData="catchData" :val="val"></edito> -->
-        <edito :catchData="catchData"></edito>
+        <!-- <edito :catchData="catchData"></edito> -->
+         <tinymce style="margin: 10px;" ref="bzlc" :id="'tinymceBzlc'" ></tinymce>
             <el-button style="display:block;margin:0 auto" type="primary" @click="uploading">上传</el-button>
       </el-card>
+
+      <el-card v-if="criteria==2" class="box-card">
+        <el-button @click="scclick" type="danger" plain>删除</el-button>
+           <div v-html="selectList"></div>
+      </el-card>
+
     </div>
   </div>
 </template>
 
 <script>
-// import store from '@/store'
+import store from '@/store'
 import api from '@/service/managememt.js'
 // import log from '@/service/login.js'
-import edito from '@/components/edito.vue'
+import tinymce from '@/components/tinymce.vue'
+
 export default {
-  components: { edito },
+  components: { tinymce },
   name: '',
   data () {
     return {
@@ -69,6 +76,7 @@ export default {
           crFile: []
         }
       },
+      selectList: '',
       form: {
         richText: '', // 文本
         projectId: '', // 项目id
@@ -83,23 +91,53 @@ export default {
       }],
       photographUrllist: [],
       criteria: 1
+
     }
   },
-  created () {},
+  created () {
+    this.selectText()
+  },
   methods: {
-    catchData (value) {
-      this.form.richText = value // 在这里接受子组件传过来的参数，赋值给data里的参数
-      this.form.richText = encodeURI(
-        this.form.richText
-          .replace(/&quot;|&#39;|&lt;|&gt;/g, '‘')
-          .replace(/&nbsp;/g, '')
-          .replace(/《/g, '《')
-          .replace(/》/g, '》')
-      )
-      console.log('this.form.richText', this.form.richText)
-      console.log('value', value)
+    scclick () {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        var params = {
+          productId: 1,
+          type: 'general'
+        }
+        api.deletedText(params, (res) => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     },
+    // catchData (value) {
+    //   this.form.richText = value // 在这里接受子组件传过来的参数，赋值给data里的参数
+    //   this.form.richText = encodeURI(
+    //     this.form.richText
+    //       .replace(/&quot;|&#39;|&lt;|&gt;/g, '‘')
+    //       .replace(/&nbsp;/g, '')
+    //       .replace(/《/g, '《')
+    //       .replace(/》/g, '》')
+    //   )
+    //   console.log('this.form.richText', this.form.richText)
+    //   console.log('value', value)
+    // }, selectList
     uploading () {
+      this.form.richText = this.$refs.bzlc.release()
+      this.form.projectId = store.getUser().projectId
+      // console.log(this.selectList)
+      // this.$refs.bzlc.setData()
       api.addText(this.form, (res) => {
         console.log(res)
         this.$message({
@@ -108,12 +146,16 @@ export default {
         })
       })
     },
+
+    selectText () {
+      api.selectText(this.form, (res) => {
+        console.log(res)
+        this.selectList = res.data.data
+      })
+    },
     Tabs (e) {
       console.log(e)
       this.criteria = e
-      if (e === '2') {
-        this.SassList()
-      }
     },
     handlePreview (file) {
       console.log(file)

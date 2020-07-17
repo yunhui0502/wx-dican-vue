@@ -104,7 +104,7 @@
       </el-tabs>
     </el-dialog>
 
-    <el-dialog title="添加类目" :visible.sync="dialogFormcategory">
+    <el-dialog style="" title="添加类目" width="96%" :visible.sync="dialogFormcategory">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="添加类目" name="first">
           <el-form :model="form2">
@@ -134,8 +134,8 @@
            </div>
 
         </el-tab-pane>
-        <el-tab-pane label="添加详情" name="second">
-           <el-upload
+        <el-tab-pane  label="添加详情" name="second">
+           <!-- <el-upload
             ref="doctypeCrfile2"
             :data="{id:id}"
             name="file"
@@ -148,7 +148,10 @@
             :on-success="handleSuccess"
           >
             <el-button size="small" type="primary">点击上传</el-button>
-          </el-upload>
+          </el-upload> -->
+
+           <tinymce style="margin: 10px;" ref="bzlc" :id="'tinymceBzlc'" ></tinymce>
+
            <div style="margin: 10px;">
             <el-button @click="dialogFormcategory = false">取 消</el-button>
             <el-button type="primary" @click="uploadConfirm2()">确 定</el-button>
@@ -156,16 +159,27 @@
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
+    <!-- <div v-html="selectList"></div> -->
   </div>
 </template>
 
 <script>
+import tinymce from '@/components/tinymce.vue'
 import store from '@/store'
+import managememt from '@/service/managememt.js'
 import api from '@/service/store.js'
 export default {
+  components: { tinymce },
   name: '',
   data () {
     return {
+      selectList: '',
+      DetailsForm: {
+        richText: '', // 文本
+        projectId: '60', // 项目id
+        textType: 'category', // 富文本类型
+        category: ''
+      },
       id: '', // 添加详情 id
       activeName: 'first',
       ifUrl: false,
@@ -208,9 +222,11 @@ export default {
   methods: {
     // 添加类目或添加详情
     addDetails (scope) {
+      console.log()
       this.dialogFormcategory = true
       this.form2.projectId = store.getUser().projectId
-      this.form2.parentCategoryId = scope.row.categoryIdid
+      this.form2.parentCategoryId = scope.row.categoryId
+      this.DetailsForm.projectId = scope.row.categoryId
       this.id = scope.row.categoryId
     },
     onchange (file, fileList) {
@@ -304,9 +320,26 @@ export default {
       }
     },
     uploadConfirm2 () {
-      var vm = this
-      vm.$refs.doctypeCrfile2.submit()
-      this.AppletList()
+      this.DetailsForm.richText = this.$refs.bzlc.release()
+      // this.DetailsForm.projectId = store.getUser().projectId
+      // console.log(this.selectList)
+      // this.$refs.bzlc.setData()
+      managememt.addText(this.DetailsForm, (res) => {
+        console.log(res)
+        this.$message({
+          message: '保存成功',
+          type: 'success'
+        })
+      })
+      // var vm = this
+      // vm.$refs.doctypeCrfile2.submit()
+      // this.AppletList()
+    },
+    selectText () {
+      managememt.selectText(this.DetailsForm, (res) => {
+        console.log(res)
+        this.selectList = res.data.data
+      })
     },
     AppletList () {
       api.findDownCategory(
@@ -367,6 +400,7 @@ export default {
   created () {
     this.AppletList()
     this.recyclebin()
+    this.selectText()
   }
 }
 </script>

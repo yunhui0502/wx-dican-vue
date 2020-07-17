@@ -9,7 +9,20 @@ function addText (params) {
   fd.append('textType', params.textType)
   return Axios.post('/api/api/dichan/company/addText', fd)
 }
-
+// 获取富文本
+function selectText (params) {
+  console.log(params)
+  return Axios.get('/api/api/dichan/company/selectText?projectId=1' + '&type=general')
+  // return Axios.get('/api/api/dichan/company/selectText?projectId=60' + '&type=category')
+}
+// 删除富文本
+function deletedText (params) {
+  console.log(params)
+  const fd = new FormData()
+  fd.append('productId', params.productId)
+  fd.append('type', params.type)
+  return Axios.post('/api/api/dichan/company/deletedText', fd)
+}
 function SassMessage (id) {
   console.log(id)
   return Axios.get('/api/api/user/hf-auth/SassMessage?accountId=' + id)
@@ -38,8 +51,10 @@ function deletedSass (params) {
 }
 export default {
   addText: addText,
+  selectText: selectText,
   SassMessage: SassMessage,
   updatePhone: updatePhone,
   SassList: SassList,
-  deletedSass: deletedSass
+  deletedSass: deletedSass,
+  deletedText: deletedText
 }
