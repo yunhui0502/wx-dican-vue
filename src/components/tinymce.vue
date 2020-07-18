@@ -16,6 +16,7 @@ import 'tinymce/plugins/wordcount' // 字数统计插件
 import 'tinymce/plugins/code'// 显示源代码插件
 import 'tinymce/plugins/advlist' // 这几条引入是因为我的导入不了，不知道为啥
 import 'tinymce/plugins/link'
+import 'tinymce/plugins/preview'
 import '@/assets/tinymce/plugins/lineheight'
 import '@/assets/tinymce/plugins/indent2em'
 import 'tinymce/plugins/nonbreaking'
@@ -39,10 +40,11 @@ export default {
         language: 'zh_CN',
         skin_url: '/assets/skins/ui/oxide',
         // 插件-实现插入图片等功能
-        plugins: 'link lists image code table colorpicker textcolor wordcount contextmenu indent2em lineheight nonbreaking',
+        plugins: 'link lists image code table colorpicker textcolor wordcount contextmenu indent2em lineheight nonbreaking preview',
         // 工具栏-根据自己需要增减功能
-        toolbar: 'bold italic underline strikethrough | fontsizeselect | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist | indent2em lineheight nonbreaking | undo redo | image code | removeformat ',
+        toolbar: 'bold italic underline strikethrough | fontsizeselect | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist | indent2em lineheight nonbreaking | undo redo | image code | removeformat preview | fontselect',
         branding: false,
+        font_formats: "微软雅黑='微软雅黑';宋体='宋体';黑体='黑体';仿宋='仿宋';楷体='楷体';隶书='隶书';幼圆='幼圆';Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings",
         menubar: false, // 顶部菜单栏显示
         min_height: 300, // 高度
         statusbar: false,
@@ -61,8 +63,10 @@ export default {
     },
     /** 外部调用该方法，可以修改绑定数据 */
     setData (data) {
-      tinymce.get(this.id).getContent(data)
+      tinymce.get(this.id).setContent(data)
+      this.$emit('fatherMethod')
     } // 数据回填
+
   },
   mounted () {
     // 配置的初始化

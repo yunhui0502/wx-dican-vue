@@ -9,7 +9,7 @@
         </el-radio-group>
       </el-card>
 
-      <el-card v-if="criteria==1" class="box-card">
+      <el-card v-show="criteria" class="box-card">
         <div style="display:flex;justify-content : space-between;">
           <el-upload
             ref="doctypeCrfile"
@@ -32,6 +32,7 @@
             <div v-for="(itme,i) in photographUrllist" :key="i" >{{itme}}</div>
           </div>
            <div>
+
              <div>富文本类型</div>
              <el-select v-model="form.textType" placeholder="项目类型">
                 <el-option
@@ -50,8 +51,9 @@
             <el-button style="display:block;margin:0 auto" type="primary" @click="uploading">上传</el-button>
       </el-card>
 
-      <el-card v-if="criteria==2" class="box-card">
+      <el-card v-show="!criteria" class="box-card">
         <el-button @click="scclick" type="danger" plain>删除</el-button>
+        <el-button @click="edit" type="danger" plain>编辑 </el-button>
            <div v-html="selectList"></div>
       </el-card>
 
@@ -90,7 +92,7 @@ export default {
         label: '详情'
       }],
       photographUrllist: [],
-      criteria: 1
+      criteria: true
 
     }
   },
@@ -121,6 +123,11 @@ export default {
         })
       })
     },
+    edit () {
+      this.criteria = !this.criteria
+
+      this.$refs.bzlc.setData(this.selectList)
+    },
     // catchData (value) {
     //   this.form.richText = value // 在这里接受子组件传过来的参数，赋值给data里的参数
     //   this.form.richText = encodeURI(
@@ -148,6 +155,7 @@ export default {
     },
 
     selectText () {
+      this.form.projectId = store.getUser().projectId
       api.selectText(this.form, (res) => {
         console.log(res)
         this.selectList = res.data.data
@@ -155,7 +163,12 @@ export default {
     },
     Tabs (e) {
       console.log(e)
-      this.criteria = e
+      // eslint-disable-next-line eqeqeq
+      if (e == 1) {
+        this.criteria = true
+      } else {
+        this.criteria = false
+      }
     },
     handlePreview (file) {
       console.log(file)

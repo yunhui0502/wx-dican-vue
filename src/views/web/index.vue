@@ -1,8 +1,95 @@
 <template>
   <div class="typepage">
-    <!-- <el-card v-if="criteria==1" class="box-card"> -->
     <el-card class="box-card">
+      <el-radio-group v-model="radiobutton" @change="Tabs" size="medium">
+        <el-radio-button class="p13" label="1">轮播</el-radio-button>
+        <el-radio-button class="p13" label="2">项目概况</el-radio-button>
+        <el-radio-button class="p13" label="3">类目管理</el-radio-button>
+      </el-radio-group>
+    </el-card>
 
+    <!-- ------------------------------轮播--------------------------------- -->
+    <el-card v-if="criteria==1" class="box-card">
+      <el-upload
+        class="upload-demo"
+        action="/api/api/dichan/ratation/addRatation"
+        :data="{projectId:projectId,type:'homePage'}"
+        name="file"
+        :on-preview="handlePreview"
+        :on-remove="handleRemove"
+        :on-success="handleSuccess"
+        :before-remove="beforeRemove"
+        multiple
+        :limit="99"
+        :on-exceed="handleExceed"
+        :file-list="fileList"
+      >
+        <el-button size="small" type="primary">点击上传</el-button>
+        <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+      </el-upload>
+      <div class="personal">
+        <div class="content">
+          <!-- 1.标题及图像说明 -->
+          <div class="content-desc">
+            <div class="title">轮播图</div>
+          </div>
+          <!-- 2.图像区域 -->
+          <div class="content-image">
+            <div v-for="(item,i) in tableDataUrl2" :key="i" class="upload-photo">
+              <li v-on:mouseover="mouseoverImg()" v-on:mouseout="mouseoutImg()">
+                <img ref="img" :src="'/api/api/dichan/category/getPicture?id='+ item.fileId" />
+                <div ref="imgDelete" class="delete-img">
+                  <i class="el-icon-delete" @click="deleteImg2(item)"></i>
+                </div>
+              </li>
+            </div>
+          </div>
+        </div>
+      </div>
+    </el-card>
+
+    <!-- --------------------------------项目概况-------------------------------------- -->
+    <el-card v-if="criteria==2" class="box-card">
+      <el-upload
+        class="upload-demo"
+        action="/api/api/dichan/company/addProject"
+        :data="{projectId:projectId}"
+        name="file"
+        :on-preview="handlePreview"
+        :on-remove="handleRemove"
+        :on-success="handleSuccess"
+        :before-remove="beforeRemove"
+        multiple
+        :limit="99"
+        :on-exceed="handleExceed"
+        :file-list="fileList"
+      >
+        <el-button size="small" type="primary">点击上传</el-button>
+        <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+      </el-upload>
+
+      <div class="personal">
+        <div class="content">
+          <!-- 1.标题及图像说明 -->
+          <div class="content-desc">
+            <div class="title">项目概况图</div>
+          </div>
+          <!-- 2.图像区域 -->
+          <div class="content-image">
+            <div v-for="(item,i) in tableDataUrl" :key="i" class="upload-photo">
+              <li v-on:mouseover="mouseoverImg()" v-on:mouseout="mouseoutImg()">
+                <img ref="img" :src="item" />
+                <div ref="imgDelete" class="delete-img">
+                  <i class="el-icon-delete" @click="deleteImg(item)"></i>
+                </div>
+              </li>
+            </div>
+          </div>
+        </div>
+      </div>
+    </el-card>
+    <!-- --------------------------------类目管理------------------------------------- -->
+    <el-card v-if="criteria==3" class="box-card">
       <el-button style="float: right;" @click="dialogVisible = true" type="purple">+添加类目</el-button>
       <el-table
         :data="tableData1"
@@ -20,11 +107,16 @@
             <img :src="'/api/api/dichan/category/getPicture?id='+ scope.row.fileId" alt />
           </template>
         </el-table-column>
+        <el-table-column prop="categoryName" label="详情" width="180">
+          <template slot-scope="scope" width="200">
+            <el-button size="mini" @click="particulars(scope)" type="danger">编辑详情</el-button>
+          </template>
+        </el-table-column>
         <el-table-column align="center" prop="address6" label="操作">
           <template slot-scope="scope" width="200">
+            <el-button size="mini" @click="addDetails(scope)" type="danger">添加子类目</el-button>
             <el-button size="mini" @click="editing(scope)" type="primary">编辑</el-button>
             <el-button size="mini" @click="Delete(scope)" type="danger">删除</el-button>
-            <el-button size="mini" @click="addDetails(scope)" type="danger">添加</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -104,7 +196,48 @@
       </el-tabs>
     </el-dialog>
 
-    <el-dialog style="" title="添加类目" width="96%" :visible.sync="dialogFormcategory">
+    <el-dialog v-show="dialogshow" title="编辑详情" :visible.sync="dialogDetails" width="90%">
+         <el-upload
+            ref="doctypeCrfile"
+            name="file"
+            :auto-upload="false"
+            action="/api/api/dichan/company/fileUpLoad"
+            :on-remove="handleRemove"
+            :before-remove="beforeRemove"
+            multiple
+            :limit="9999"
+            :on-success="handleSuccess"
+          >
+            <el-button size="mini" type="primary">选择本地图片</el-button>
+          </el-upload>
+          <el-button type="primary" @click="uploadURL">生产URL地址</el-button>
+          <div>
+            <div v-for="(itme,i) in photographUrllist" :key="i" >{{itme}}</div>
+          </div>
+      <!-- <el-upload
+            ref="doctypeCrfile2"
+            :data="{id:id}"
+            name="file"
+            :auto-upload="false"
+            action="/api/api/dichan/category/addCategoryDetail"
+            :on-remove="handleRemove"
+            :before-remove="beforeRemove"
+            multiple
+            :limit="1"
+            :on-success="handleSuccess"
+          >
+            <el-button size="small" type="primary">点击上传</el-button>
+      </el-upload>-->
+
+      <tinymce @fatherMethod="fatherMethod" style="margin: 10px;" ref="bzlc" :id="'tinymceBzlc'"></tinymce>
+
+      <div style="margin: 10px;">
+        <el-button @click="dialogDetails = false">取 消</el-button>
+        <el-button type="primary" @click="uploadConfirm2()">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog style title="添加类目" width="40%" :visible.sync="dialogFormcategory">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="添加类目" name="first">
           <el-form :model="form2">
@@ -128,38 +261,14 @@
           >
             <el-button size="small" type="primary">点击上传</el-button>
           </el-upload>
-           <div style="margin: 10px;">
+          <div style="margin: 10px;">
             <el-button @click="dialogFormcategory = false">取 消</el-button>
             <el-button type="primary" @click="uploadConfirm(2)">确 定</el-button>
-           </div>
-
-        </el-tab-pane>
-        <el-tab-pane  label="添加详情" name="second">
-           <!-- <el-upload
-            ref="doctypeCrfile2"
-            :data="{id:id}"
-            name="file"
-            :auto-upload="false"
-            action="/api/api/dichan/category/addCategoryDetail"
-            :on-remove="handleRemove"
-            :before-remove="beforeRemove"
-            multiple
-            :limit="1"
-            :on-success="handleSuccess"
-          >
-            <el-button size="small" type="primary">点击上传</el-button>
-          </el-upload> -->
-
-           <tinymce style="margin: 10px;" ref="bzlc" :id="'tinymceBzlc'" ></tinymce>
-
-           <div style="margin: 10px;">
-            <el-button @click="dialogFormcategory = false">取 消</el-button>
-            <el-button type="primary" @click="uploadConfirm2()">确 定</el-button>
-           </div>
+          </div>
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
-    <!-- <div v-html="selectList"></div> -->
+    <div v-html="selectList"></div>
   </div>
 </template>
 
@@ -173,12 +282,15 @@ export default {
   name: '',
   data () {
     return {
+      photographUrllist: [],
+      projectId: '',
+      tableDataUrl: [],
+      tableDataUrl2: [],
       selectList: '',
       DetailsForm: {
         richText: '', // 文本
         projectId: '60', // 项目id
-        textType: 'category', // 富文本类型
-        category: ''
+        textType: 'category' // 富文本类型
       },
       id: '', // 添加详情 id
       activeName: 'first',
@@ -199,6 +311,8 @@ export default {
           label: '一级目录'
         }
       ],
+      dialogshow: false,
+      dialogDetails: true,
       dialogVisible: false,
       dialogFormVisible: false,
       dialogFormcategory: false,
@@ -219,15 +333,152 @@ export default {
       tableData1: []
     }
   },
+
   methods: {
-    // 添加类目或添加详情
+    uploadURL () {
+      var vm = this
+      vm.$refs.doctypeCrfile.submit()
+    },
+    AppletList2 () {
+      api.selectProject('1', res => {
+        this.tableDataUrl = res.data.data
+      })
+    },
+    getRatation () {
+      api.getRatation('1', res => {
+        this.tableDataUrl2 = res.data.data
+      })
+    },
+    // ------------------------------------------------------------------------------------------------
+    // --------------------------图片--------------------------
+    handleRemove (file, fileList) {
+      console.log(file, fileList)
+    },
+    handlePreview (file) {
+      console.log(file)
+    },
+    handleExceed (files, fileList) {
+      this.$message.warning(
+        `当前限制选择 3 个文件，本次选择了 ${
+          files.length
+        } 个文件，共选择了 ${files.length + fileList.length} 个文件`
+      )
+    },
+    beforeRemove (file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`)
+    },
+    handleSuccess (response, file, fileList) {
+      console.log(response, file, fileList)
+      this.photographUrllist.push(response.data)
+      if (response.status === 200) {
+        this.$message.success('上传成功')
+        this.uploadVisible = false
+      }
+      this.AppletList2()
+      this.getRatation()
+      this.fileList = []
+    },
+
+    // 删除图片
+    deleteImg (e) {
+      console.log(e)
+
+      this.$confirm('是否删除该照片?', '删除', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          var obj = e + ''
+          var index = obj.lastIndexOf('=')
+          obj = obj.substring(index + 1, obj.length)
+          console.log(obj)
+          api.deletedProject(obj, res => {
+            this.AppletList2()
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+    },
+    deleteImg2 (e) {
+      console.log(e)
+
+      this.$confirm('是否删除该照片?', '删除', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          api.deleteRatation(e.id, res => {
+            this.getRatation()
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+    },
+    // 鼠标移入图片
+    mouseoverImg () {
+      if (this.$refs.img.src === this.uploadImage) {
+        // this.$refs.imgDelete.style.display = 'none'
+      } else {
+        // this.$refs.imgDelete.style.display = 'block'
+      }
+    },
+    // 鼠标移出图片
+    mouseoutImg () {
+      // this.$refs.imgDelete.style.display = 'none'
+    },
+    // ----------------------------------------------------
+    // 添加类目
     addDetails (scope) {
       console.log()
       this.dialogFormcategory = true
       this.form2.projectId = store.getUser().projectId
       this.form2.parentCategoryId = scope.row.categoryId
+      // this.DetailsForm.projectId = scope.row.categoryId
+      this.id = scope.row.categoryId
+    },
+    // 添加详情
+    particulars (scope) {
+      console.log(scope.row)
+      this.dialogDetails = true
+      this.dialogDetails = false
       this.DetailsForm.projectId = scope.row.categoryId
       this.id = scope.row.categoryId
+      managememt.selectText(this.DetailsForm, res => {
+        console.log(res)
+        this.selectList = res.data.data
+        if (res.data.data != null) {
+          console.log('不为空')
+          this.$refs.bzlc.setData(res.data.data)
+        } else {
+          console.log('空')
+          this.$refs.bzlc.setData('')
+          // this.dialogDetails = true
+        }
+      })
+
+      //
+    },
+    fatherMethod () {
+      console.log(12)
+      this.dialogDetails = true
     },
     onchange (file, fileList) {
       console.log(file, fileList)
@@ -268,7 +519,10 @@ export default {
       console.log(tree, treeNode, resolve)
       // categoryId
       api.findDownCategory(
-        { parentCategoryId: tree.categoryId, projectId: store.getUser().projectId },
+        {
+          parentCategoryId: tree.categoryId,
+          projectId: store.getUser().projectId
+        },
         res => {
           console.log(res)
           resolve(res.data.data)
@@ -285,21 +539,23 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        api.deleteCategory(params, res => {
-          console.log(res)
-          this.AppletList()
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
+      })
+        .then(() => {
+          api.deleteCategory(params, res => {
+            console.log(res)
+            this.AppletList()
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
           })
         })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
         })
-      })
     },
     Tabs (e) {
       this.criteria = e
@@ -324,23 +580,19 @@ export default {
       // this.DetailsForm.projectId = store.getUser().projectId
       // console.log(this.selectList)
       // this.$refs.bzlc.setData()
-      managememt.addText(this.DetailsForm, (res) => {
+      managememt.addText(this.DetailsForm, res => {
         console.log(res)
         this.$message({
           message: '保存成功',
           type: 'success'
         })
+        this.$refs.bzlc.beforeDestroy()
       })
       // var vm = this
       // vm.$refs.doctypeCrfile2.submit()
       // this.AppletList()
     },
-    selectText () {
-      managememt.selectText(this.DetailsForm, (res) => {
-        console.log(res)
-        this.selectList = res.data.data
-      })
-    },
+
     AppletList () {
       api.findDownCategory(
         { parentCategoryId: '-1', projectId: store.getUser().projectId },
@@ -350,46 +602,46 @@ export default {
         }
       )
     },
-    handlePreview (file) {
-      console.log(file)
-      // eslint-disable-next-line no-undef
-      // var fileUrl = library.isEmpty(file.url) ? file.response.url : file.url
-      // eslint-disable-next-line no-undef
-      // fileUrl = fileUrl.indexOf(apis.api_file_urlNew) >= 0 ? fileUrl : (apis.api_file_urlNew + fileUrl)
-      // window.open(fileUrl)
-    },
-    handleRemove (file, fileList) {
-      console.log(file, fileList)
-      for (var i = 0; i < this.fileList.length; i++) {
-        // eslint-disable-next-line eqeqeq
-        if (this.fileList[i].uid == file.uid) {
-          this.fileList.splice(i, 1)
-          break
-        }
-      }
-    },
-    beforeRemove (file, fileList) {
-      // eslint-disable-next-line eqeqeq
-      if (this.Qualified == '') {
-        return this.$confirm(`确定移除 ${file.name}？`)
-        // eslint-disable-next-line eqeqeq
-      } else if (this.Qualified == '1') {
-        return true
-      }
-    },
-    handleExceed (files, fileList) {
-      console.log(1)
-      this.$message.warning(`最多上传 ${this.limit} 个文件`)
-    },
-    handleSuccess (response) {
-      // eslint-disable-next-line eqeqeq
-      console.log(response)
-      // this.photographUrllist.push(response.data)
-      if (response.status === 200) {
-        this.$message.success('上传成功')
-        this.uploadVisible = false
-      }
-    },
+    // handlePreview (file) {
+    //   console.log(file)
+    //   // eslint-disable-next-line no-undef
+    //   // var fileUrl = library.isEmpty(file.url) ? file.response.url : file.url
+    //   // eslint-disable-next-line no-undef
+    //   // fileUrl = fileUrl.indexOf(apis.api_file_urlNew) >= 0 ? fileUrl : (apis.api_file_urlNew + fileUrl)
+    //   // window.open(fileUrl)
+    // },
+    // handleRemove (file, fileList) {
+    //   console.log(file, fileList)
+    //   for (var i = 0; i < this.fileList.length; i++) {
+    //     // eslint-disable-next-line eqeqeq
+    //     if (this.fileList[i].uid == file.uid) {
+    //       this.fileList.splice(i, 1)
+    //       break
+    //     }
+    //   }
+    // },
+    // beforeRemove (file, fileList) {
+    //   // eslint-disable-next-line eqeqeq
+    //   if (this.Qualified == '') {
+    //     return this.$confirm(`确定移除 ${file.name}？`)
+    //     // eslint-disable-next-line eqeqeq
+    //   } else if (this.Qualified == '1') {
+    //     return true
+    //   }
+    // },
+    // handleExceed (files, fileList) {
+    //   console.log(1)
+    //   this.$message.warning(`最多上传 ${this.limit} 个文件`)
+    // },
+    // handleSuccess (response) {
+    //   // eslint-disable-next-line eqeqeq
+    //   console.log(response)
+    //   // this.photographUrllist.push(response.data)
+    //   if (response.status === 200) {
+    //     this.$message.success('上传成功')
+    //     this.uploadVisible = false
+    //   }
+    // },
     recyclebin () {
       api.getProject(res => {
         console.log(res)
@@ -400,11 +652,106 @@ export default {
   created () {
     this.AppletList()
     this.recyclebin()
-    this.selectText()
+    // this.selectText()
+    this.projectId = store.getUser().projectId
+    this.AppletList2()
+    this.getRatation()
   }
 }
 </script>
 
 <style lang="less" scoped>
 @import "./miain.less";
+.personal {
+  margin: 10px 0;
+  padding: 10px;
+  background: #f0f0f0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: hidden;
+  border-radius: 3px;
+  padding-bottom: 20px;
+  .content {
+    background-color: #fff;
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+    padding: 10px;
+    // overflow-y: scroll;
+    overflow: hidden;
+    display: flex;
+    padding: 10px 0;
+    flex-direction: column;
+    //  1.标题及图像说明
+    .content-desc {
+      margin: 0px 10px;
+      .title {
+        font-size: 16px;
+        border-left: 5px solid #2d8cf0;
+        padding-left: 10px;
+        margin-bottom: 16px;
+      }
+      .desc {
+        margin-left: 18px;
+      }
+    }
+    // 2.图像区域
+    .content-image {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 25px 28px;
+      .upload-photo {
+        width: 180px;
+        height: 180px;
+        box-sizing: border-box;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-left: 20px;
+        margin-top: 0px;
+        padding-top: 0px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        li {
+          width: 180px;
+          height: 180px;
+          margin-right: 15px;
+          position: relative;
+          .delete-img {
+            display: block;
+            position: absolute;
+            width: 180px;
+            height: 40px;
+            line-height: 40px;
+            left: 0px;
+            top: 140px;
+            background: rgba(59, 60, 61, 0.5);
+            // box-sizing: content-box;
+            z-index: 999;
+            cursor: pointer;
+            text-align: right;
+            i {
+              margin: 8px 10px 0 0;
+              display: block;
+              font-size: 24px;
+              color: white;
+            }
+          }
+          img {
+            border: 1px dashed #d9d9d9;
+            border-radius: 5px;
+            box-sizing: border-box;
+            width: 180px;
+            height: 180px;
+            margin-top: 0px;
+            &:hover {
+              border: 1px dashed #409eff;
+            }
+          }
+        }
+      }
+    }
+  }
+}
 </style>

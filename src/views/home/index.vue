@@ -39,9 +39,9 @@
           router
         >
           <el-menu-item index="/">富文本模块</el-menu-item>
-          <el-menu-item index="/store">用户模块</el-menu-item>
-          <el-menu-item index="/web">分类模块</el-menu-item>
-          <el-menu-item index="/uni-app">项目</el-menu-item>
+          <el-menu-item index="/store">用户中心</el-menu-item>
+          <!-- <el-menu-item index="/web">分类模块</el-menu-item> -->
+          <el-menu-item index="/uni-app">项目管理</el-menu-item>
           <!-- <el-menu-item index="/news">消息管理</el-menu-item>
           <el-menu-item index="/set">设置</el-menu-item> -->
         </el-menu>

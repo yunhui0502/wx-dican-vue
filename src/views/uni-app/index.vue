@@ -1,15 +1,15 @@
 <template>
   <!-- -----------------------------------uni-app商城管理--------------------------------------------------------------------------- -->
   <div class="typepage">
-    <el-card class="box-card">
+    <!-- <el-card class="box-card">
       <el-radio-group v-model="radiobutton" @change="Tabs" size="medium">
         <el-radio-button class="p13" label="1">轮播</el-radio-button>
         <el-radio-button class="p13" label="2">项目概况</el-radio-button>
         <el-radio-button class="p13" label="3">项目</el-radio-button>
       </el-radio-group>
-    </el-card>
+    </el-card> -->
     <!-- ------------------------------轮播--------------------------------- -->
-    <el-card v-if="criteria==1" class="box-card">
+    <!-- <el-card v-if="criteria==1" class="box-card">
       <el-upload
         class="upload-demo"
         action="/api/api/dichan/ratation/addRatation"
@@ -25,15 +25,14 @@
         :file-list="fileList"
       >
         <el-button size="small" type="primary">点击上传</el-button>
-        <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
       </el-upload>
       <div class="personal">
         <div class="content">
-          <!-- 1.标题及图像说明 -->
+          1.标题及图像说明
           <div class="content-desc">
             <div class="title">轮播图</div>
           </div>
-          <!-- 2.图像区域 -->
+          2.图像区域
           <div class="content-image">
             <div v-for="(item,i) in tableDataUrl2" :key="i" class="upload-photo">
               <li v-on:mouseover="mouseoverImg()" v-on:mouseout="mouseoutImg()">
@@ -46,9 +45,9 @@
           </div>
         </div>
       </div>
-    </el-card>
+    </el-card> -->
     <!-- --------------------------------回收站-------------------------------------- -->
-    <el-card v-if="criteria==2" class="box-card">
+    <!-- <el-card v-if="criteria==2" class="box-card">
       <el-upload
         class="upload-demo"
         action="/api/api/dichan/company/addProject"
@@ -64,16 +63,15 @@
         :file-list="fileList"
       >
         <el-button size="small" type="primary">点击上传</el-button>
-        <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
       </el-upload>
 
       <div class="personal">
         <div class="content">
-          <!-- 1.标题及图像说明 -->
+          1.标题及图像说明
           <div class="content-desc">
             <div class="title">项目概况图</div>
           </div>
-          <!-- 2.图像区域 -->
+          2.图像区域
           <div class="content-image">
             <div v-for="(item,i) in tableDataUrl" :key="i" class="upload-photo">
               <li v-on:mouseover="mouseoverImg()" v-on:mouseout="mouseoutImg()">
@@ -86,16 +84,17 @@
           </div>
         </div>
       </div>
-    </el-card>
+    </el-card> -->
 
     <!-- -------------------------------XM------------------------------------- -->
-    <el-card v-if="criteria==3" class="box-card">
-      <el-button size="mini" @click="dialogFormVisible = true" type="primary">添加用户</el-button>
+    <el-card  class="box-card">
+      <el-button size="mini" @click="dialogFormVisible = true" type="primary">添加项目</el-button>
       <el-table :data="tableData" border style="width: 100%">
         <el-table-column align="center" prop="id" label="ID"></el-table-column>
         <el-table-column align="center" prop="projectName" label="项目名称"></el-table-column>
         <el-table-column align="center" prop="address6" label="操作">
           <template slot-scope="scope" width="200">
+            <el-button size="mini" @click="Details(scope)" type="primary">查看详情</el-button>
             <el-button size="mini" @click="Subtitle(scope)" type="primary">编辑</el-button>
             <el-button size="mini" @click="Delete(scope)" type="danger">删除</el-button>
           </template>
@@ -200,6 +199,9 @@ export default {
       this.fileList = []
     },
     // ----------------------------------------------------
+    Details () {
+      this.$router.push({ path: '/web' })
+    },
     // 删除
     Delete (scope) {
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {

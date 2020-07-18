@@ -12,7 +12,7 @@ function addText (params) {
 // 获取富文本
 function selectText (params) {
   console.log(params)
-  return Axios.get('/api/api/dichan/company/selectText?projectId=1' + '&type=general')
+  return Axios.get('/api/api/dichan/company/selectText?projectId=' + params.projectId + '&type=' + params.textType)
   // return Axios.get('/api/api/dichan/company/selectText?projectId=60' + '&type=category')
 }
 // 删除富文本
