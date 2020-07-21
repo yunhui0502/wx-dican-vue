@@ -20,12 +20,12 @@ const router = new VueRouter({
       component: (resolve) => require(['@/views/home/index.vue'], resolve),
       children: [
         {
-          path: '/',
+          path: '/management',
           name: 'management',
           component: (resolve) => require(['@/views/management/index.vue'], resolve)
         },
         {
-          path: '/store',
+          path: '/',
           name: 'store',
           component: (resolve) => require(['@/views/store/index.vue'], resolve)
         },
