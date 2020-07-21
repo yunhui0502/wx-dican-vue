@@ -88,4 +88,7 @@ export default {
       width:100%;
       height:100%;
   }
+  .tox-tinymce-inline {
+    z-index:13000000
+  }
 </style>

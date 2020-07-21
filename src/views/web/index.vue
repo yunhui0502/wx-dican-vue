@@ -2,7 +2,8 @@
   <div class="typepage">
     <el-card class="box-card">
       <el-radio-group v-model="radiobutton" @change="Tabs" size="medium">
-        <el-radio-button class="p13" label="1">轮播</el-radio-button>
+        <el-radio-button class="p13" label="1">首页
+        </el-radio-button>
         <el-radio-button class="p13" label="2">项目概况</el-radio-button>
         <el-radio-button class="p13" label="3">类目管理</el-radio-button>
       </el-radio-group>
@@ -30,9 +31,6 @@
       <div class="personal">
         <div class="content">
           <!-- 1.标题及图像说明 -->
-          <div class="content-desc">
-            <div class="title">轮播图</div>
-          </div>
           <!-- 2.图像区域 -->
           <div class="content-image">
             <div v-for="(item,i) in tableDataUrl2" :key="i" class="upload-photo">
@@ -49,8 +47,8 @@
     </el-card>
 
     <!-- --------------------------------项目概况-------------------------------------- -->
-    <el-card v-if="criteria==2" class="box-card">
-      <el-upload
+    <!-- <el-card v-if="criteria==2" class="box-card"> -->
+      <!-- <el-upload
         class="upload-demo"
         action="/api/api/dichan/company/addProject"
         :data="{projectId:projectId}"
@@ -65,16 +63,15 @@
         :file-list="fileList"
       >
         <el-button size="small" type="primary">点击上传</el-button>
-        <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
       </el-upload>
 
       <div class="personal">
         <div class="content">
-          <!-- 1.标题及图像说明 -->
+          1.标题及图像说明
           <div class="content-desc">
             <div class="title">项目概况图</div>
           </div>
-          <!-- 2.图像区域 -->
+          2.图像区域
           <div class="content-image">
             <div v-for="(item,i) in tableDataUrl" :key="i" class="upload-photo">
               <li v-on:mouseover="mouseoverImg()" v-on:mouseout="mouseoutImg()">
@@ -86,8 +83,9 @@
             </div>
           </div>
         </div>
-      </div>
-    </el-card>
+      </div> -->
+      <manageme v-if="criteria==2"></manageme>
+    <!-- </el-card> -->
     <!-- --------------------------------类目管理------------------------------------- -->
     <el-card v-if="criteria==3" class="box-card">
       <el-button style="float: right;" @click="dialogVisible = true" type="purple">+添加类目</el-button>
@@ -196,7 +194,7 @@
       </el-tabs>
     </el-dialog>
 
-    <el-dialog v-show="dialogshow" title="编辑详情" :visible.sync="dialogDetails" width="90%">
+    <el-dialog title="编辑详情" :visible.sync="dialogDetails" width="90%">
          <el-upload
             ref="doctypeCrfile"
             name="file"
@@ -229,7 +227,7 @@
             <el-button size="small" type="primary">点击上传</el-button>
       </el-upload>-->
 
-      <tinymce @fatherMethod="fatherMethod" style="margin: 10px;" ref="bzlc" :id="'tinymceBzlc'"></tinymce>
+      <tinymce @fatherMethod="fatherMethod" v-if="dialogDetails" style="margin: 10px;" ref="blc" :id="'tinymceBzlc'"></tinymce>
 
       <div style="margin: 10px;">
         <el-button @click="dialogDetails = false">取 消</el-button>
@@ -274,11 +272,12 @@
 
 <script>
 import tinymce from '@/components/tinymce.vue'
+import manageme from '@/views/management'
 import store from '@/store'
 import managememt from '@/service/managememt.js'
 import api from '@/service/store.js'
 export default {
-  components: { tinymce },
+  components: { tinymce, manageme },
   name: '',
   data () {
     return {
@@ -311,8 +310,8 @@ export default {
           label: '一级目录'
         }
       ],
-      dialogshow: false,
-      dialogDetails: true,
+      dialogshow: true,
+      dialogDetails: false,
       dialogVisible: false,
       dialogFormVisible: false,
       dialogFormcategory: false,
@@ -335,6 +334,13 @@ export default {
   },
 
   methods: {
+    handleClose (done) {
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          done()
+        })
+        .catch(_ => {})
+    },
     uploadURL () {
       var vm = this
       vm.$refs.doctypeCrfile.submit()
@@ -457,19 +463,23 @@ export default {
     // 添加详情
     particulars (scope) {
       console.log(scope.row)
-      this.dialogDetails = true
-      this.dialogDetails = false
       this.DetailsForm.projectId = scope.row.categoryId
       this.id = scope.row.categoryId
+      this.dialogDetails = true
       managememt.selectText(this.DetailsForm, res => {
         console.log(res)
         this.selectList = res.data.data
         if (res.data.data != null) {
           console.log('不为空')
-          this.$refs.bzlc.setData(res.data.data)
+          setTimeout(() => {
+            this.$refs.blc.setData(res.data.data)
+          }, 10)
         } else {
           console.log('空')
-          this.$refs.bzlc.setData('')
+          setTimeout(() => {
+            this.$refs.blc.setData('')
+          }, 10)
+
           // this.dialogDetails = true
         }
       })
@@ -479,6 +489,7 @@ export default {
     fatherMethod () {
       console.log(12)
       this.dialogDetails = true
+      this.dialogshow = true
     },
     onchange (file, fileList) {
       console.log(file, fileList)
@@ -559,6 +570,11 @@ export default {
     },
     Tabs (e) {
       this.criteria = e
+      // eslint-disable-next-line eqeqeq
+      if (e == 3) {
+        // this.dialogDetails = true
+        // this.dialogshow = false
+      }
     },
     uploadConfirm (e) {
       if (this.ifUrl) {

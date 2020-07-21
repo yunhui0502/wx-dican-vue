@@ -34,6 +34,12 @@ async function deleteProject (id, handleResult) {
 async function updateProject (params, handleResult) {
   store.updateProject(params).then((res) => handleResult(res))
 }
+async function selectAdmin (handleResult) {
+  store.selectAdmin().then((res) => handleResult(res))
+}
+async function addAdmin (userId, handleResult) {
+  store.addAdmin(userId).then((res) => handleResult(res))
+}
 // ------------------------------------------------------------------------
 async function AppletList (params, handleResult) {
   store.AppletList(params).then((res) => handleResult(res))
@@ -69,6 +75,9 @@ async function updateCategory (params, handleResult) {
 async function addProject (params, handleResult) {
   store.addProject(params).then((res) => handleResult(res))
 }
+async function deleteAdmin (userId, handleResult) {
+  store.deleteAdmin(userId).then((res) => handleResult(res))
+}
 export default {
   AppletList: AppletList,
   AddApplet: AddApplet,
@@ -92,5 +101,8 @@ export default {
   deleteRatation: deleteRatation,
   addProject: addProject,
   deleteProject: deleteProject,
-  updateProject: updateProject
+  updateProject: updateProject,
+  selectAdmin: selectAdmin,
+  addAdmin: addAdmin,
+  deleteAdmin: deleteAdmin
 }

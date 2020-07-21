@@ -1,9 +1,3 @@
- /deep/ .el-dialog__wrapper {
-  z-index: 200 !important;
-}
- /deep/ .v-modal {
-  z-index: 199 !important;
-}
 img {
   width: 80px;
   height: 80px;

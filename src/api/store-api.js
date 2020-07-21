@@ -98,6 +98,21 @@ function updateProject (params) {
   fd.append('name', params.projectName)
   return Axios.post('/api/api/dichan/project/updateProject', fd)
 }
+// 查询后台登陆的人
+function selectAdmin () {
+  return Axios.get('/api/api/dichan/login/selectAdmin')
+}
+// 添加管理员
+function addAdmin (userId) {
+  console.log(userId)
+  const fd = new FormData()
+  fd.append('userId', userId)
+  return Axios.post('/api/api/dichan/login/addAdmin', fd)
+}
+// 删除管理员
+function deleteAdmin (userId) {
+  return Axios.get('/api/api/dichan/login/deleteAdmin?id=' + userId)
+}
 // ----------------------------------------------------------------------------------------
 // 添加
 function AddApplet (params) {
@@ -169,6 +184,7 @@ function payment (params) {
   fd.append('bossId', params.bossId)
   return Axios.post('/api/api/cart/PayBoss/payment', fd)
 }
+
 export default {
   AppletList: AppletList,
   AddApplet: AddApplet,
@@ -192,5 +208,8 @@ export default {
   deleteRatation: deleteRatation,
   addProject: addProject,
   deleteProject: deleteProject,
-  updateProject: updateProject
+  updateProject: updateProject,
+  selectAdmin: selectAdmin,
+  addAdmin: addAdmin,
+  deleteAdmin: deleteAdmin
 }
