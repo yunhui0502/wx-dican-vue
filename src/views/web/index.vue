@@ -592,7 +592,7 @@ export default {
       }
     },
     uploadConfirm2 () {
-      this.DetailsForm.richText = this.$refs.bzlc.release()
+      this.DetailsForm.richText = this.$refs.blc.release()
       // this.DetailsForm.projectId = store.getUser().projectId
       // console.log(this.selectList)
       // this.$refs.bzlc.setData()
@@ -602,7 +602,6 @@ export default {
           message: '保存成功',
           type: 'success'
         })
-        this.$refs.bzlc.beforeDestroy()
       })
       // var vm = this
       // vm.$refs.doctypeCrfile2.submit()
