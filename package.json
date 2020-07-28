@@ -13,6 +13,7 @@
     "core-js": "^3.6.4",
     "element-ui": "^2.13.2",
     "tinymce": "^5.4.1",
+    "tinymce-imageupload": "^1.0.7",
     "vue": "^2.6.11",
     "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.1.6",
@@ -35,6 +36,8 @@
     "less": "^3.0.4",
     "less-loader": "^5.0.0",
     "lint-staged": "^9.5.0",
+    "node-sass": "^4.14.1",
+    "sass-loader": "^9.0.2",
     "vue-template-compiler": "^2.6.11"
   },
   "gitHooks": {

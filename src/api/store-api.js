@@ -2,8 +2,8 @@
 import Axios from 'axios'
 
 // ----------------------------------------------------------------------------------------
-function selectUser () {
-  return Axios.get('/api/api/dichan/company/selectUser')
+function selectUser (params) {
+  return Axios.get('/api/api/dichan/company/selectUser?pageNum=' + params.pageNum + '&pageSize=' + params.pageSize)
 }
 // 添加用户
 function addUser (params) {

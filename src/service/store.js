@@ -1,8 +1,8 @@
 /* eslint-disable require-jsdoc */
 import store from '@/api/store-api.js'
 // ------------------------------------------------------------------------
-async function selectUser (handleResult) {
-  store.selectUser().then((res) => handleResult(res))
+async function selectUser (params, handleResult) {
+  store.selectUser(params).then((res) => handleResult(res))
 }
 async function deletedUser (params, handleResult) {
   store.deletedUser(params).then((res) => handleResult(res))

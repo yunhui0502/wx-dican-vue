@@ -88,7 +88,10 @@
 
     <!-- -------------------------------XM------------------------------------- -->
     <el-card  class="box-card">
-      <el-button size="mini" @click="dialogFormVisible = true" type="primary">添加项目</el-button>
+      <div style="display:flex;justify-content : space-between;margin: 10px;">
+        <el-button size="mini" @click="dialogFormVisible = true" type="primary">+ 添加项目</el-button>
+      </div>
+
       <el-table :data="tableData" border style="width: 100%">
         <el-table-column align="center" prop="id" label="ID"></el-table-column>
         <el-table-column align="center" prop="projectName" label="项目名称"></el-table-column>
@@ -199,7 +202,11 @@ export default {
       this.fileList = []
     },
     // ----------------------------------------------------
-    Details () {
+    Details (scope) {
+      console.log(scope.row.id)
+      const data = store.getUser()
+      data.projectId = scope.row.id
+      store.setUser(data)
       this.$router.push({ path: '/web' })
     },
     // 删除

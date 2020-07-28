@@ -266,7 +266,7 @@
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
-    <div v-html="selectList"></div>
+    <!-- <div v-html="selectList"></div> -->
   </div>
 </template>
 
@@ -346,12 +346,12 @@ export default {
       vm.$refs.doctypeCrfile.submit()
     },
     AppletList2 () {
-      api.selectProject('1', res => {
+      api.selectProject(store.getUser().projectId, res => {
         this.tableDataUrl = res.data.data
       })
     },
     getRatation () {
-      api.getRatation('1', res => {
+      api.getRatation(store.getUser().projectId, res => {
         this.tableDataUrl2 = res.data.data
       })
     },

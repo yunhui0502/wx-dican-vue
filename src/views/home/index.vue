@@ -6,7 +6,7 @@
         <img style="width:100%" src="../../assets/images/head-log.png" alt />
       </div>
       <div class="center box">
-        <el-select @change="categshijan"  size="mini" style="position:absolute" v-model="projectId" placeholder="请选择">
+        <!-- <el-select @change="categshijan"  size="mini" style="position:absolute" v-model="projectId" placeholder="请选择">
           <el-option
             change="categshijan"
             class="qqqwe"
@@ -15,19 +15,19 @@
             :label="item.projectName"
             :value="item.id"
           ></el-option>
-        </el-select>
-        <h1>管理中心</h1>
+        </el-select> -->
+        <h1>数据管理中心</h1>
 
         <el-dropdown>
           <span class="el-dropdown-link">
-            用名称
+            你好，用户{{content.phone}}
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>
-              <div @click="amend">修改密码</div>
+              <div @click="amend">管理员中心</div>
             </el-dropdown-item>
-            <el-dropdown-item>退出</el-dropdown-item>
+            <el-dropdown-item><div @click="quit">退出</div></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
 
@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import api from '@/service/store.js'
+// import api from '@/service/store.js'
 import store from '@/store'
 export default {
   data () {
@@ -64,31 +64,40 @@ export default {
     }
   },
   methods: {
+    quit () {
+      store.delUser()
+      this.$router.push({ path: '/loogin' })
+    },
     handleSelect (key, keyPath) {
       console.log(key, keyPath)
     },
     amend () {
       console.log(1)
-      this.$router.push({ path: '/passwd' })
-    },
-    categshijan (e) {
-      console.log(e)
-      const data = store.getUser()
-      data.projectId = e
-      store.setUser(data)
-    },
-    recyclebin () {
-      api.getProject(res => {
-        console.log(res)
-        this.project = res.data.data
-        const data = store.getUser()
-        data.projectId = res.data.data[0].id
-        store.setUser(data)
+      this.$router.push({
+        path: '/',
+        query: {
+          label: 2
+        }
       })
     }
+    // categshijan (e) {
+    //   console.log(e)
+    //   const data = store.getUser()
+    //   data.projectId = e
+    //   store.setUser(data)
+    // },
+    // recyclebin () {
+    //   api.getProject(res => {
+    //     console.log(res)
+    //     this.project = res.data.data
+    //     const data = store.getUser()
+    //     data.projectId = res.data.data[0].id
+    //     store.setUser(data)
+    //   })
+    // }
   },
   created () {
-    this.recyclebin()
+    // this.recyclebin()
   },
   mounted () {
     this.content = store.getUser()

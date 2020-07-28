@@ -63,7 +63,7 @@
               </el-form-item>
 
               <el-form-item style="text-align: center;">
-                <el-link @click="Switch" v-if="loginmethod" type="success">手机号登录</el-link>
+                <!-- <el-link @click="Switch" v-if="loginmethod" type="success">手机号登录</el-link> -->
                 <el-checkbox style="margin-left: 10px;" v-model="checked">记住我，以后登录</el-checkbox>
               </el-form-item>
 
@@ -126,7 +126,7 @@
               </el-form-item>
 
               <el-form-item style="text-align: center;">
-                <el-link @click="Switch" v-if="!loginmethod" type="success">账号登录</el-link>
+                <!-- <el-link @click="Switch" v-if="!loginmethod" type="success">账号登录</el-link> -->
                 <el-checkbox style="margin-left: 10px;" v-model="checked">记住我，以后登录</el-checkbox>
               </el-form-item>
 

@@ -10,9 +10,9 @@
 
     <!-- <el-card v-if="criteria==1" class="box-card"> -->
     <el-card v-if="criteria==1" class="box-card">
-      <div style="display:flex;justify-content : space-between;margin: 10px;">
-        <el-button size="small" @click="Derived" type="primary">点击下载</el-button>
-
+      <div style="display:flex;justify-content : flex-end;color: red;font-size: 12px;">*备注：请先下载用户数据，修改后重新上传</div>
+      <div style="display:flex;justify-content : flex-end;margin: 10px;">
+        <el-button size="small" style="margin-right: 10px;" @click="Derived" type="primary">+ 添加用户</el-button>
         <el-upload
           class="upload-demo"
           action="api/api/dichan/company"
@@ -31,16 +31,27 @@
       </div>
 
       <el-table :data="tableData" border style="width: 100%">
-        <el-table-column align="center" prop="id" label="ID"></el-table-column>
+        <!-- <el-table-column align="center" prop="id" label="ID"></el-table-column> -->
         <el-table-column align="center" prop="name" label="用户名称"></el-table-column>
         <el-table-column align="center" prop="phone" label="手机号"></el-table-column>
         <el-table-column align="center" prop="address6" label="操作">
           <template slot-scope="scope" width="200">
             <el-button size="mini" @click="dialogFormVisible = true" type="primary">添加用户</el-button>
-            <el-button size="mini" @click="Delete(scope)" type="danger">删除用户</el-button>
+            <el-button size="mini" @click="Delete(scope)" type="danger">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
+
+      <el-pagination
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage3"
+        :page-size="pageSize"
+        layout="prev, pager, next, jumper"
+        :total="total"
+      ></el-pagination>
+
     </el-card>
 
     <el-dialog title="添加用户" :visible.sync="dialogFormVisible">
@@ -61,8 +72,9 @@
     <!-- --------------------------------回收站-------------------------------------- -->
 
     <el-card v-if="criteria==2" class="box-card">
-
-    <el-button style="margin: 10px;" @click="dialogFormSetting = true" type="primary">添加用户</el-button>
+      <div style="display:flex;justify-content : space-between;margin: 10px;">
+        <el-button size="small" @click="dialogFormSetting = true" type="primary">+ 添加管理员</el-button>
+      </div>
 
       <el-table :data="tableData2" border style="width: 100%">
         <el-table-column align="center" prop="id" label="ID"></el-table-column>
@@ -70,7 +82,7 @@
         <el-table-column align="center" prop="phone" label="手机号"></el-table-column>
         <el-table-column align="center" prop="address6" label="操作">
           <template slot-scope="scope" width="200">
-            <el-button size="mini" @click="Delete2(scope)" type="danger">删除用户</el-button>
+            <el-button size="mini" @click="Delete2(scope)" type="danger">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -98,6 +110,10 @@ export default {
   name: '',
   data () {
     return {
+      total: 100,
+      currentPage3: 1,
+      pageSize: 10,
+      pageNum: 1,
       dialogFormSetting: false,
       dialogFormVisible: false,
       form: {
@@ -107,7 +123,6 @@ export default {
       fileList: [],
       radiobutton: '1',
       criteria: 1, // 判断显示那个表格
-      currentPage3: 5,
       input2: '',
       tableData: [],
       tableData2: [],
@@ -121,6 +136,15 @@ export default {
     }
   },
   methods: {
+
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange (val) {
+      console.log(`当前页: ${val}`)
+      this.pageNum = val
+      this.AppletList()
+    },
 
     DeleteManage (scope) {
       console.log(scope)
@@ -214,9 +238,14 @@ export default {
       this.criteria = e
     },
     AppletList () {
-      store.selectUser(res => {
+      const params = {
+        pageNum: this.pageNum,
+        pageSize: this.pageSize
+      }
+      store.selectUser(params, res => {
         console.log(res)
-        this.tableData = res.data.data
+        this.tableData = res.data.data.list
+        this.total = res.data.data.total
       })
     },
     Derived () {
@@ -243,6 +272,13 @@ export default {
   created () {
     this.AppletList()
     this.selectAdmin()
+    // eslint-disable-next-line eqeqeq
+    if (this.$route.query.label == 2) {
+      console.log(this.$route.query.label)
+      this.criteria = this.$route.query.label
+      this.radiobutton = this.$route.query.label
+    }
+
     // this.recyclebin()
   }
 }
