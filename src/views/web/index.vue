@@ -195,23 +195,7 @@
     </el-dialog>
 
     <el-dialog title="编辑详情" :visible.sync="dialogDetails" width="90%">
-         <el-upload
-            ref="doctypeCrfile"
-            name="file"
-            :auto-upload="false"
-            action="/api/api/dichan/company/fileUpLoad"
-            :on-remove="handleRemove"
-            :before-remove="beforeRemove"
-            multiple
-            :limit="9999"
-            :on-success="handleSuccess"
-          >
-            <el-button size="mini" type="primary">选择本地图片</el-button>
-          </el-upload>
-          <el-button type="primary" @click="uploadURL">生产URL地址</el-button>
-          <div>
-            <div v-for="(itme,i) in photographUrllist" :key="i" >{{itme}}</div>
-          </div>
+
       <!-- <el-upload
             ref="doctypeCrfile2"
             :data="{id:id}"

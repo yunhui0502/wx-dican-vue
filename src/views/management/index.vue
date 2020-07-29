@@ -11,7 +11,7 @@
 
       <el-card v-show="criteria" class="box-card">
         <div style="display:flex;justify-content : space-between;">
-          <el-upload
+          <!-- <el-upload
             ref="doctypeCrfile"
             :file-list="uploadform.docType.crFile"
             name="file"
@@ -30,8 +30,8 @@
           <el-button type="primary" @click="uploadConfirm">生产URL地址</el-button>
           <div>
             <div v-for="(itme,i) in photographUrllist" :key="i" >{{itme}}</div>
-          </div>
-           <div>
+          </div> -->
+           <!-- <div>
 
              <div>富文本类型</div>
              <el-select v-model="form.textType" placeholder="项目类型">
@@ -42,7 +42,7 @@
                   :value="item.value">
                 </el-option>
               </el-select>
-          </div>
+          </div> -->
         </div>
 
         <!-- <edito :catchData="catchData" :val="val"></edito> -->
@@ -72,7 +72,7 @@ export default {
   name: '',
   data () {
     return {
-      radiobutton: '',
+      radiobutton: 1,
       uploadform: {
         docType: {
           crFile: []

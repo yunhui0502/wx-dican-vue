@@ -24,6 +24,7 @@
            <img   :src="itme" alt="">
          </div>
        </div>
+
           <el-button @click="confirm" style="display:block;margin:0 auto" type="primary">确定</el-button>
     </div>
   </div>
@@ -130,8 +131,8 @@ export default {
 .modal-upload {
   .modal-mask {
     @extend %fixed;
-    background-color: rgba($color: #000000, $alpha: 0.5);
-    z-index: 100;
+    background-color: rgba($color: #F6F6F6F6, $alpha: 0.5);
+    z-index: 1000000000;
   }
   .model-alert {
     @extend %fixed;
@@ -139,7 +140,9 @@ export default {
     height: 80%;
     background-color: #fff;
     z-index: 10000000000;
+    border: 1px solid #CCCCCC;
     margin: auto;
+    overflow:auto;
   }
   img {
     width: 80px;
