@@ -266,8 +266,8 @@ export default {
             type: 'login'
           }
           log.code(params, res => {
-            console.log(res)
-            this.ruleForm.passwd = res.data.data
+            // console.log(res.data.data)
+            // this.ruleForm.passwd = res.data.data
           })
         // this.$router.push('/');
         } else {

@@ -88,7 +88,7 @@
     <!-- </el-card> -->
     <!-- --------------------------------类目管理------------------------------------- -->
     <el-card v-if="criteria==3" class="box-card">
-      <el-button style="float: right;" @click="dialogVisible = true" type="purple">+添加类目</el-button>
+      <el-button  size="small" style="float: right; margin: 10px;" @click="dialogVisible = true" type="primary">+添加类目</el-button>
       <el-table
         :data="tableData1"
         style="width: 100%"
@@ -169,8 +169,7 @@
               ></el-option>
             </el-select>
           </div>
-
-          <div>
+          <div style="margin-top: 20px;">
             新建类目名称
             <el-input
               v-model="form1.category"
@@ -664,7 +663,7 @@ export default {
 .personal {
   margin: 10px 0;
   padding: 10px;
-  background: #f0f0f0;
+  // background: #f0f0f0;
   width: 100%;
   height: 100%;
   box-sizing: border-box;

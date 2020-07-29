@@ -2,14 +2,15 @@
   <!------------------------------------------账户管理-------------------------------------------------------------->
   <div>
     <div class="typepage">
-      <el-card  class="box-card">
+      <!-- <el-card  class="box-card">
         <el-radio-group v-model="radiobutton" @change="Tabs" size="medium">
           <el-radio-button class="p13" label="1">富文本</el-radio-button>
           <el-radio-button class="p13" label="2">富文本列表</el-radio-button>
         </el-radio-group>
-      </el-card>
+      </el-card> -->
 
-      <el-card v-show="criteria" class="box-card">
+      <!-- <el-card v-show="criteria" class="box-card"> -->
+      <el-card class="box-card">
         <div style="display:flex;justify-content : space-between;">
           <!-- <el-upload
             ref="doctypeCrfile"
@@ -47,15 +48,15 @@
 
         <!-- <edito :catchData="catchData" :val="val"></edito> -->
         <!-- <edito :catchData="catchData"></edito> -->
-         <tinymce style="margin: 10px;" ref="bzlc" :id="'tinymceBzlc'" ></tinymce>
+         <tinymce @fatherMethod="fatherMethod" style="margin: 10px;" ref="bzlc" :id="'tinymceBzlc'" ></tinymce>
             <el-button style="display:block;margin:0 auto" type="primary" @click="uploading">上传</el-button>
       </el-card>
 
-      <el-card v-show="!criteria" class="box-card">
+      <!-- <el-card v-show="!criteria" class="box-card">
         <el-button @click="scclick" type="danger" plain>删除</el-button>
         <el-button @click="edit" type="danger" plain>编辑 </el-button>
            <div v-html="selectList"></div>
-      </el-card>
+      </el-card> -->
 
     </div>
   </div>
@@ -158,7 +159,20 @@ export default {
       this.form.projectId = store.getUser().projectId
       api.selectText(this.form, (res) => {
         console.log(res)
-        this.selectList = res.data.data
+        if (res.data.data != null) {
+          console.log('不为空')
+          setTimeout(() => {
+            this.$refs.bzlc.setData(res.data.data)
+          }, 10)
+        } else {
+          console.log('空')
+          setTimeout(() => {
+            this.$refs.bzlc.setData('')
+          }, 10)
+
+          // this.dialogDetails = true
+        }
+        // this.selectList = res.data.data
       })
     },
     Tabs (e) {
@@ -169,6 +183,12 @@ export default {
       } else {
         this.criteria = false
       }
+    },
+
+    fatherMethod () {
+      // console.log(12)
+      // this.dialogDetails = true
+      // this.dialogshow = true
     },
     handlePreview (file) {
       console.log(file)

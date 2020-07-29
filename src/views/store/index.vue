@@ -93,7 +93,7 @@
     </el-card>
 
     <el-dialog title="添加管理员" :visible.sync="dialogFormSetting">
-      <el-table :data="tableData" border style="width: 100%">
+      <el-table :data="dialogData" border style="width: 100%">
         <el-table-column align="center" prop="id" label="ID"></el-table-column>
         <el-table-column align="center" prop="name" label="用户名称"></el-table-column>
         <el-table-column align="center" prop="phone" label="手机号"></el-table-column>
@@ -103,6 +103,15 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        background
+        @size-change="handleSizeChange2"
+        @current-change="handleCurrentChange2"
+        :current-page.sync="currentPage3"
+        :page-size="pageSize2"
+        layout="prev, pager, next, jumper"
+        :total="total2"
+      ></el-pagination>
     </el-dialog>
 
   </div>
@@ -114,10 +123,13 @@ export default {
   name: '',
   data () {
     return {
-      total: 100,
+      total: 1,
       currentPage3: 1,
       pageSize: 10,
       pageNum: 1,
+      total2: 1,
+      pageSize2: 10,
+      pageNum2: 1,
       dialogFormSetting: false,
       dialogFormVisible: false,
       form: {
@@ -130,6 +142,7 @@ export default {
       input2: '',
       tableData: [],
       tableData2: [],
+      dialogData: [],
       rules: {
         name: [
           { required: true, message: '请输入用户名称', trigger: 'blur' },
@@ -149,7 +162,14 @@ export default {
       this.pageNum = val
       this.AppletList()
     },
-
+    handleSizeChange2 (val) {
+      console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange2 (val) {
+      console.log(`当前页: ${val}`)
+      this.pageNum2 = val
+      this.AppletList2()
+    },
     DeleteManage (scope) {
       console.log(scope)
       store.addAdmin(scope.row.id, res => {
@@ -252,6 +272,17 @@ export default {
         this.total = res.data.data.total
       })
     },
+    AppletList2 () {
+      const params = {
+        pageNum: this.pageNum2,
+        pageSize: this.pageSize2
+      }
+      store.selectUser(params, res => {
+        console.log(res)
+        this.dialogData = res.data.data.list
+        this.total2 = res.data.data.total
+      })
+    },
     Derived () {
       var url2 = 'api/api/dichan/company/selectTests'
       window.location.href = url2
@@ -275,6 +306,7 @@ export default {
   },
   created () {
     this.AppletList()
+    this.AppletList2()
     this.selectAdmin()
     // eslint-disable-next-line eqeqeq
     if (this.$route.query.label == 2) {
