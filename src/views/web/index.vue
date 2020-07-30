@@ -193,7 +193,7 @@
       </el-tabs>
     </el-dialog>
 
-    <el-dialog title="编辑详情" :visible.sync="dialogDetails" width="90%">
+    <el-dialog title="编辑详情" class="abow_dialog" :visible.sync="dialogDetails" width="90%">
 
       <!-- <el-upload
             ref="doctypeCrfile2"
@@ -660,6 +660,29 @@ export default {
 
 <style lang="less" scoped>
 @import "./miain.less";
+
+.abow_dialog {
+    display: flex;
+    justify-content: center;
+    align-items: Center;
+    overflow: hidden;
+    /deep/.el-dialog {
+        margin: 0 auto !important;
+        height: 90%;
+        overflow: hidden;
+        /deep/.el-dialog__body {
+            position: absolute;
+            left: 0;
+            top: 54px;
+            bottom: 0;
+            right: 0;
+            padding: 0;
+            z-index: 1;
+            overflow: hidden;
+            overflow-y: auto;
+        }
+    }
+}
 .personal {
   margin: 10px 0;
   padding: 10px;

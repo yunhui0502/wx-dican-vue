@@ -143,6 +143,7 @@ input, textarea {
 
 .typepage {
   margin: 0 auto;
-  width: 1034px;
+  /* width: 1034px; */
+  margin: 0  120px;
   background-color: #fff;
 }
