@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-    <div class="box1">
+    <div  class="box1">
       <div style="display:flex;">
         <div class="clear">
           <div class="box-log clearfloat">
@@ -13,7 +13,7 @@
           </div>
         </div>
 
-        <div class="Login">
+        <div class="Login" v-loading.fullscreen.lock="fullscreenLoading">
           <h3 class="font-shadow">管理员登录</h3>
           <div class="div-form">
             <el-form
@@ -177,12 +177,13 @@ export default {
     }
     return {
       uuid: '',
+      fullscreenLoading: false,
       captcha: '1', // 存储对比验证码
       loginmethod: false,
       checked: true,
       authCodeurl: '',
       ruleForm: {
-        authKey: '17612219999', // 手机号
+        authKey: '', // 手机号
         // authKey: '', // 手机号
         loginType: '2', // 登录类型
         passwd: '', // 验证码
@@ -266,7 +267,7 @@ export default {
             type: 'login'
           }
           log.code(params, res => {
-            // console.log(res.data.data)
+            // console.log(res)
             // this.ruleForm.passwd = res.data.data
           })
         // this.$router.push('/');
@@ -288,11 +289,19 @@ export default {
       }
       this.$refs[formName].validate(valid => {
         if (valid) {
+          // this.fullscreenLoading = true
           log.login(this.ruleForm, res => {
-            console.log(res)
-            const data = res.data.data
-            store.setUser(data)
-            this.$router.push('/')
+            console.log(res.status)
+            // eslint-disable-next-line eqeqeq
+            if (res.status == 200) {
+              console.log(res)
+              // this.fullscreenLoading = false
+              const data = res.data.data
+              store.setUser(data)
+              this.$router.push('/')
+            } else {
+              this.$message.error('权限不足')
+            }
           })
         } else {
           console.log('error submit!!')

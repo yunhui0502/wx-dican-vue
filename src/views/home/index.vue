@@ -100,7 +100,8 @@ export default {
     // this.recyclebin()
   },
   mounted () {
-    this.content = store.getUser()
+    // console.log('1111111111111111', store.getUser().info[0])
+    this.content = store.getUser().info[0]
   }
 }
 </script>

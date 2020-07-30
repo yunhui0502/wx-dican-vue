@@ -4,12 +4,15 @@ import Axios from 'axios'
 function login (params) {
   console.log(params)
   const fd = new FormData()
+  // ---------------短信登录-------------------
   if (params.authKey !== '') {
-    fd.append('authKey', params.authKey)
+    // fd.append('authKey', params.authKey)
+    fd.append('phone', params.authKey)
   }
   if (params.passwd !== '') {
     fd.append('passwd', params.passwd)
   }
+  // ---------------密码登录-------------------
   if (params.password !== '') {
     fd.append('password', params.password)
   }
@@ -18,8 +21,8 @@ function login (params) {
   }
 
   fd.append('loginType', params.loginType)
-
-  return Axios.post('/api/api/user/hf-auth/LoginSass', fd)
+  // return Axios.post('/api/api/user/hf-auth/LoginSass', fd)
+  return Axios.post('/api/api/dichan/login/adminLogin', fd)
 }
 
 function token (params) {
@@ -35,7 +38,8 @@ function code (params) {
   const fd = new FormData()
   fd.append('phone', params.phone)
   fd.append('type', params.type)
-  return Axios.post('/api/api/user/user/code', fd)
+  return Axios.post('/api/api/dichan/login/code', fd)
+  // return Axios.post('/api/api/user/user/code', fd)
 }
 function authCode (uuid) {
   // var num = Math.ceil(Math.random() * 10)

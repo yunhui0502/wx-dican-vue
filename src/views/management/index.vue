@@ -1,7 +1,7 @@
 <template>
   <!------------------------------------------账户管理-------------------------------------------------------------->
   <div>
-    <div class="typepage">
+    <div class="">
       <!-- <el-card  class="box-card">
         <el-radio-group v-model="radiobutton" @change="Tabs" size="medium">
           <el-radio-button class="p13" label="1">富文本</el-radio-button>
